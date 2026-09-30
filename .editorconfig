@@ -1,0 +1,23 @@
+root = true
+
+[*]
+charset = utf-8
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Add braces to control-flow statements in languages whose formatter supports it.
+ij_any_if_brace_force = always
+ij_any_for_brace_force = always
+ij_any_while_brace_force = always
+ij_any_do_while_brace_force = always
+ij_any_keep_control_statement_in_one_line = false
+ij_any_keep_simple_blocks_in_one_line = false
+ij_any_keep_simple_methods_in_one_line = false
+
+[{*.kt,*.kts}]
+indent_style = space
+indent_size = 4
+
+# Prefer block bodies (`fun f() { return value }`) over expression bodies
+# (`fun f() = value`). IntelliJ has no EditorConfig formatter option to
+# convert existing Kotlin expression bodies into blocks.

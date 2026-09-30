@@ -1,0 +1,48 @@
+<idea-plugin>
+    <id>ca.bushtail.CLion3DS</id>
+    <name>3DS Development</name>
+    <vendor>bushtail</vendor>
+    <description>
+        <![CDATA[Nintendo 3DS homebrew development in CLion: devkitPro setup, CMake project generation, building, and deployment with 3dslink.]]>
+    </description>
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.clion</depends>
+    <depends>com.intellij.cmake</depends>
+
+    <resource-bundle>messages.MyMessageBundle</resource-bundle>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <directoryProjectGenerator implementation="wizard.Dev3DSProjectWizard"/>
+        <postStartupActivity implementation="project.Dev3DSProjectStartup"/>
+        <toolWindow id="Nintendo 3DS" anchor="left" icon="/icons/dev3DSToolWindow.svg" factoryClass="ui.Dev3DSToolWindowFactory"/>
+    </extensions>
+
+    <actions>
+        <group id="ca.bushtail.CLion3DS.Menu" popup="true">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+            <action id="ca.bushtail.CLion3DS.InstallTools" class="actions.dev3ds.InstallToolsAction"/>
+            <action id="ca.bushtail.CLion3DS.RepairProject" class="actions.dev3ds.RepairProjectAction"/>
+            <action id="ca.bushtail.CLion3DS.Toolchain" class="actions.dev3ds.ToolchainAction"/>
+            <action id="ca.bushtail.CLion3DS.UseEmulator" class="actions.dev3ds.UseEmulatorAction"/>
+            <action id="ca.bushtail.CLion3DS.ImportSystemFiles" class="actions.firmware.ImportSystemFilesAction"/>
+            <action id="ca.bushtail.CLion3DS.BackUpSystemFiles" class="actions.firmware.BackUpSystemFilesAction"/>
+            <action id="ca.bushtail.CLion3DS.DownloadEmulatorFirmware" class="actions.firmware.DownloadEmulatorFirmwareAction"/>
+        </group>
+        <action id="ca.bushtail.CLion3DS.Build" class="actions.dev3ds.BuildAction">
+            <add-to-group group-id="BuildMenu" anchor="last"/>
+        </action>
+        <action id="ca.bushtail.CLion3DS.BuildCia" class="actions.cia.BuildCiaAction">
+            <add-to-group group-id="BuildMenu" anchor="last"/>
+        </action>
+        <action id="ca.bushtail.CLion3DS.SendCia" class="actions.cia.SendCiaAction">
+            <add-to-group group-id="RunMenu" anchor="last"/>
+        </action>
+        <action id="ca.bushtail.CLion3DS.Deploy" class="actions.dev3ds.DeployAction">
+            <add-to-group group-id="RunMenu" anchor="last"/>
+        </action>
+        <action id="ca.bushtail.CLion3DS.Emulator" class="actions.dev3ds.EmulatorAction">
+            <add-to-group group-id="RunMenu" anchor="last"/>
+        </action>
+    </actions>
+
+</idea-plugin>
