@@ -4,6 +4,7 @@ import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.nio.file.Path
 import javax.swing.JComboBox
 import javax.swing.JLabel
 import javax.swing.JPanel
@@ -42,12 +43,13 @@ class Dev3DSWizardTest {
     @Test fun projectNameControlsNewProjectFolder() {
         val wizard = Dev3DSProjectWizard()
         val location = TextFieldWithBrowseButton()
-        location.text = "C:\\Users\\developer\\CLionProjects\\untitled"
+        val parent = Path.of(System.getProperty("java.io.tmpdir"), "CLionProjects")
+        location.text = parent.resolve("untitled").toString()
         wizard.createPeer().getComponent(location) { }
 
         val name = (wizard.settingsPanel as JPanel).components.filterIsInstance<JTextField>().first()
         assertEquals("untitled", name.text)
         name.text = "My3DSGame"
-        assertEquals("C:\\Users\\developer\\CLionProjects\\My3DSGame", location.text)
+        assertEquals(parent.resolve("My3DSGame").toString(), location.text)
     }
 }
