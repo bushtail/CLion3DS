@@ -30,9 +30,17 @@ Downloads come from [devkitPro](https://github.com/devkitPro/installer/releases)
 
 ## Install the plugin
 
-Build with `gradlew.bat test buildPlugin --no-configuration-cache`, then install the ZIP from `build/distributions` using **Settings > Plugins > Install Plugin from Disk** in CLion.
+Build with `gradlew.bat test buildPlugin`, then install the ZIP from `build/distributions` using **Settings > Plugins > Install Plugin from Disk** in CLion. Configuration caching is enabled, so repeating the same build command can reuse its task graph.
 
 Pushing to `main` or `master` runs the release workflow, which tests and packages the plugin and creates a GitHub release named after `version` in `gradle.properties`. The release workflow uses GitHub's built-in `GITHUB_TOKEN`. To update JetBrains Marketplace, add a repository secret named `JETBRAINS_MARKETPLACE_TOKEN` containing a JetBrains Marketplace personal access token, then run **Publish Plugin to JetBrains Marketplace** from GitHub Actions and choose the stable, beta, or alpha channel. `GITHUB_TOKEN` cannot authenticate to JetBrains Marketplace. JetBrains requires the first version of a new plugin to be uploaded manually before Gradle can publish updates. Increase the plugin version before each release or Marketplace update.
+
+Both workflows use `gradle/actions/setup-gradle` to cache dependencies, compiled build scripts, artifact transforms, and build outputs. To also reuse the configuration cache between GitHub runs, add a repository Actions secret named `GRADLE_ENCRYPTION_KEY` containing a random 16-byte key encoded as Base64. Generate one with `openssl rand -base64 16`, or in PowerShell:
+
+```powershell
+[Convert]::ToBase64String([System.Security.Cryptography.RandomNumberGenerator]::GetBytes(16))
+```
+
+Keep the same secret value across runs. Without it, dependency and build output caching still work, but the task graph is recalculated on each fresh runner. The first run warms the caches; changes to build configuration or the plugin version can require recalculation even when the caches are restored. Gradle cache usage is shown in each workflow run's job summary.
 
 Open **Tools > Nintendo 3DS > Install or Repair Tools** to provision everything before creating a project, or use **Build 3DS Project** and **Run in Emulator** to install each tool on first use. An existing devkitPro directory can be selected with **Use Existing devkitPro**.
 

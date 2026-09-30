@@ -1,10 +1,8 @@
 package actions.dev3ds
 
 import actions.ActionDialogs.TITLE
-import actions.ActionDialogs.input
-import actions.ActionDialogs.report
 import actions.BackgroundActionRunner.background
-import actions.dev3ds.Dev3DSArtifactFinder.findArtifact
+import build.ActiveBuild
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
@@ -12,7 +10,6 @@ import com.intellij.openapi.ui.Messages
 import toolchain.ToolProvisioner
 import toolchain.process.ToolchainProcessRequest
 import toolchain.process.ToolchainProcessRunner
-import java.nio.file.Files
 import java.nio.file.Path
 import java.time.Duration
 
@@ -27,20 +24,13 @@ class DeployAction : AnAction() {
     override fun actionPerformed(event: AnActionEvent) {
         val project = event.project ?: return
         val root = Path.of(project.basePath ?: return)
-        val artifact = findArtifact(root)
-        val fileText = input("3DSX file to deploy:", artifact?.toString().orEmpty()) ?: return
-        val file = Path.of(fileText).toAbsolutePath().normalize()
-        if (!Files.isRegularFile(file) || !file.fileName.toString().endsWith(".3dsx")) {
-            report("Choose an existing .3dsx file.", true)
-            return
-        }
         val address = Messages.showInputDialog("3DS IP address (leave blank for broadcast):", TITLE, Messages.getQuestionIcon())?.trim() ?: return
-        val args = if (address.isBlank()) {
-            listOf(file.toString())
-        } else {
-            listOf("-a", address, file.toString())
-        }
         background(project, "Deploying to Nintendo 3DS") {
+            val directory = ActiveBuild.directory(project)
+            ActiveBuild.build(root, directory)
+            val file = ActiveBuild.artifact(root, directory)
+            val args = if (address.isBlank()) listOf(file.toString())
+                else listOf("-a", address, file.toString())
             val installation = ToolProvisioner.ensureToolchain()
             val result = ToolchainProcessRunner().run(
                 ToolchainProcessRequest(

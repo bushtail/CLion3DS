@@ -43,6 +43,12 @@ object ActiveBuild {
         return result.standardOutput.takeLast(2000)
     }
 
+    fun artifact(root: Path, directory: Path): Path {
+        val file = directory.resolve("${projectName(root)}.3dsx")
+        require(Files.isRegularFile(file)) { "Build did not produce $file" }
+        return file
+    }
+
     fun projectName(root: Path): String {
         val cmake = root.resolve("CMakeLists.txt")
         require(Files.isRegularFile(cmake)) { "No CMakeLists.txt found at $root" }

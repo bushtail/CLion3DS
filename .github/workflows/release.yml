@@ -23,7 +23,11 @@ jobs:
         with:
           distribution: temurin
           java-version: '25'
-          cache: gradle
+
+      - name: Set up Gradle and restore build caches
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Read release version
         shell: bash

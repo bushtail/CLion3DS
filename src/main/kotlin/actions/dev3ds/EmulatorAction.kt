@@ -1,9 +1,7 @@
 package actions.dev3ds
 
-import actions.ActionDialogs.input
-import actions.ActionDialogs.report
 import actions.BackgroundActionRunner.background
-import actions.dev3ds.Dev3DSArtifactFinder.findArtifact
+import build.ActiveBuild
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
@@ -21,18 +19,16 @@ class EmulatorAction : AnAction() {
     }
 
     override fun actionPerformed(event: AnActionEvent) {
-        val root = Path.of(event.project?.basePath ?: return)
-        val artifactText = input("3DSX file to run:", findArtifact(root)?.toString().orEmpty()) ?: return
-        val artifact = Path.of(artifactText).toAbsolutePath().normalize()
-        if (!Files.isRegularFile(artifact) || !artifact.fileName.toString().endsWith(".3dsx")) {
-            report("Choose an existing .3dsx file.", true)
-            return
-        }
-        background(event.project, "Launching Nintendo 3DS emulator") {
+        val project = event.project ?: return
+        val root = Path.of(project.basePath ?: return)
+        background(project, "Launching Nintendo 3DS emulator") {
+            val directory = ActiveBuild.directory(project)
+            ActiveBuild.build(root, directory)
+            val artifact = ActiveBuild.artifact(root, directory)
             val executable = Dev3DSToolchain.emulator()?.takeIf(Files::isRegularFile)
                 ?: AzaharInstaller().install().also(Dev3DSToolchain::saveEmulator)
             ProcessBuilder(executable.toString(), artifact.toString()).directory(root.toFile()).start()
-            "Launched ${artifact.fileName} in ${executable.fileName}."
+            "Launched ${artifact.fileName} from $directory in Emulator."
         }
     }
 }
