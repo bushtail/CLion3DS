@@ -4,6 +4,14 @@ A CLion plugin for Nintendo 3DS homebrew projects using devkitPro, libctru, CMak
 
 3DS projects have a **Nintendo 3DS** tab on CLion's left tool window bar. It groups the plugin's Build, Run, and Tools actions in one place; the same actions remain in their CLion menus.
 
+## AI Usage Disclaimer
+
+As a developer, I intend on making use of every tool available to me, as I've outgrown the elitism I once had against AI. Codex is one such tool that I made use of during the development process.
+Any code written by AI was thoroughly vetted, tested, and improved by myself. By the time the project is released on JetBrains's Marketplace, all image assets will be replaced by ones created by a human.
+Admittedly, I am not very good at writing documentation. This is something that AI absolutely excels in. In fact, this disclaimer section is the only documentation that wasn't written by ChatGPT. Honestly, if
+you're a developer and you insist on writing long, detailed documentation yourself - all the power to you, but I'm not that type of person. This is **not** to say that I support the AI-bro's idea of "vibecoding".
+You, as a developer, should always be the last line of quality control when using automated tools such as this. Test your shit, fix your shit. This isn't, and shouldn't be an entirely hands-off process.
+
 ## What it does
 
 - **Tools > Nintendo 3DS > Install or Repair Tools** installs the devkitPro 3DS toolchain and, on Windows, a portable emulator.
@@ -33,11 +41,3 @@ On Linux and macOS, the plugin installs the 3DS packages through an existing `dk
 For hardware deployment, open Homebrew Launcher on the console and press Y to start netloader. The `deploy` action accepts an IP address or uses network broadcast when left empty.
 
 The generator creates applications. Sending a CIA to a physical console requires a 3DS with custom firmware and FBI on the same local network.
-
-## AI Usage Disclaimer
-
-As a developer, I intend on making use of every tool available to me, as I've outgrown the elitism I once had against AI. Codex is one such tool that I made use of during the development process.
-Any code written by AI was thoroughly vetted, tested, and improved by myself. By the time the project is released on JetBrains's Marketplace, all image assets will be replaced by ones created by a human.
-Admittedly, I am not very good at writing documentation. This is something that AI absolutely excels in. In fact, this disclaimer section is the only documentation that wasn't written by ChatGPT. Honestly, if
-you're a developer and you insist on writing long, detailed documentation yourself - all the power to you, but I'm not that type of person. This is **not** to say that I support the AI-bro's idea of "vibecoding".
-You, as a developer, should always be the last line of quality control when using automated tools such as this. Test your shit, fix your shit. This isn't, and shouldn't be an entirely hands-off process.
